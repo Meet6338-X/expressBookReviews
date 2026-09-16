@@ -5,6 +5,8 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+const BASE_URL = "http://localhost:5000";
+
 public_users.post("/register", (req, res) => {
   //Write your code here
   const username = req.body.username;
@@ -28,53 +30,56 @@ public_users.post("/register", (req, res) => {
     .json({ message: "User successfully registred. Now you can login" });
 });
 
-// Get the book list available in the shop
+// Get the book list available in the shop (async/await with Axios)
 public_users.get("/", async function (req, res) {
   //Write your code here
-  return res.status(200).json({
-    status: "success",
-    results: Object.keys(books).length,
-    data: books,
-  });
+  try {
+    const response = await axios.get(`${BASE_URL}/data/books`);
+    return res.status(200).json({
+      status: "success",
+      results: Object.keys(response.data).length,
+      data: response.data,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching book list" });
+  }
 });
 
-// Get book details based on ISBN
-public_users.get("/isbn/:isbn", function (req, res) {
+// Get book details based on ISBN (async/await with Axios)
+public_users.get("/isbn/:isbn", async function (req, res) {
   //Write your code here
-  const isbn = parseInt(req.params.isbn);
-  const book = books[isbn];
-  if (!book) {
+  try {
+    const response = await axios.get(`${BASE_URL}/data/isbn/${req.params.isbn}`);
+    return res.status(200).json({ status: "success", data: response.data });
+  } catch (error) {
     return res.status(404).json({ message: "Not found" });
   }
-  return res.status(200).json({ status: "success", data: book });
 });
 
-// Get book details based on author
-public_users.get("/author/:author", function (req, res) {
+// Get book details based on author (async/await with Axios)
+public_users.get("/author/:author", async function (req, res) {
   //Write your code here
-  const author = req.params.author;
-  const booKeys = Object.keys(books);
-  const bookIsbn = booKeys.filter((key) => books[key].author === author);
-  const book = books[parseInt(bookIsbn[0])];
-
-  if (!book) {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/data/author/${encodeURIComponent(req.params.author)}`
+    );
+    return res.status(200).json({ status: "success", data: response.data });
+  } catch (error) {
     return res.status(404).json({ message: "Not found" });
   }
-  return res.status(200).json({ status: "success", data: book });
 });
 
-// Get all books based on title
-public_users.get("/title/:title", function (req, res) {
+// Get all books based on title (async/await with Axios)
+public_users.get("/title/:title", async function (req, res) {
   //Write your code here
-  const title = req.params.title;
-  const booKeys = Object.keys(books);
-  const bookIsbn = booKeys.filter((key) => books[key].title === title);
-  const book = books[parseInt(bookIsbn[0])];
-
-  if (!book) {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/data/title/${encodeURIComponent(req.params.title)}`
+    );
+    return res.status(200).json({ status: "success", data: response.data });
+  } catch (error) {
     return res.status(404).json({ message: "Not found" });
   }
-  return res.status(200).json({ status: "success", data: book });
 });
 
 //  Get book review
@@ -87,6 +92,52 @@ public_users.get("/review/:isbn", function (req, res) {
     return res.status(404).json({ message: "Not found" });
   }
   return res.status(200).json({ status: "success", reviews: bookReview });
+});
+
+// ---------- Internal data endpoints (fetched by the Axios calls above) ----------
+
+// serve the full books object
+public_users.get("/data/books", (req, res) => {
+  return res.status(200).json(books);
+});
+
+// serve book by ISBN
+public_users.get("/data/isbn/:isbn", (req, res) => {
+  const book = books[parseInt(req.params.isbn)];
+  if (!book) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json(book);
+});
+
+// serve books by author
+public_users.get("/data/author/:author", (req, res) => {
+  const author = req.params.author;
+  const result = Object.keys(books)
+    .filter((key) => books[key].author === author)
+    .reduce((acc, key) => {
+      acc[key] = books[key];
+      return acc;
+    }, {});
+  if (Object.keys(result).length === 0) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json(result);
+});
+
+// serve books by title
+public_users.get("/data/title/:title", (req, res) => {
+  const title = req.params.title;
+  const result = Object.keys(books)
+    .filter((key) => books[key].title === title)
+    .reduce((acc, key) => {
+      acc[key] = books[key];
+      return acc;
+    }, {});
+  if (Object.keys(result).length === 0) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  return res.status(200).json(result);
 });
 
 module.exports.general = public_users;
