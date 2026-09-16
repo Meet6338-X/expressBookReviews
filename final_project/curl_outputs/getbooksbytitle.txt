@@ -1,0 +1,11 @@
+Question 5: cURL command and output displaying book(s) retrieved based on the specified title
+
+Command:
+
+curl -s http://localhost:5000/title/Pride%20and%20Prejudice
+
+Output:
+
+{"status":"success","data":{"8":{"author":"Jane Austen","title":"Pride and Prejudice","reviews":{}}}}
+
+Book by title "Pride and Prejudice" retrieved successfully with ISBN key 8, author, title, and reviews.

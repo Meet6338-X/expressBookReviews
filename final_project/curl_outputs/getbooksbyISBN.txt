@@ -1,0 +1,11 @@
+Question 3: cURL command and output displaying book(s) retrieved based on the specified ISBN
+
+Command:
+
+curl -s http://localhost:5000/isbn/1
+
+Output:
+
+{"status":"success","data":{"author":"Chinua Achebe","title":"Things Fall Apart","reviews":{}}}
+
+Book details for ISBN 1 retrieved successfully (author, title, reviews).

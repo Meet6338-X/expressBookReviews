@@ -1,0 +1,11 @@
+Question 6: cURL command and output displaying the initial book review (before any review is added)
+
+Command:
+
+curl -s http://localhost:5000/review/1
+
+Output:
+
+{"status":"success","reviews":{}}
+
+The initial review for the book with ISBN 1 is an empty object (no reviews yet).

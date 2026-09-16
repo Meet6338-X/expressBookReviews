@@ -1,0 +1,31 @@
+Question 9: cURL command and output showing the message and reviews after adding/modifying a book review (logged-in user; session cookie saved at login with -c cookies.txt)
+
+1) Add a review for the book with ISBN 1
+
+Command:
+
+curl -s -X PUT "http://localhost:5000/customer/auth/review/1?review=An%20excellent%20read" -b cookies.txt
+
+Output:
+
+{"message":"The review for the book with ISBN 1 has been added/updated","reviews":{"john_doe":"An excellent read"}}
+
+2) Modify the same review (logged in as the same user)
+
+Command:
+
+curl -s -X PUT "http://localhost:5000/customer/auth/review/1?review=Even%20better%20on%20second%20read" -b cookies.txt
+
+Output:
+
+{"message":"The review for the book with ISBN 1 has been added/updated","reviews":{"john_doe":"Even better on second read"}}
+
+3) Adding a review without logging in (failure case)
+
+Command:
+
+curl -s -X PUT "http://localhost:5000/customer/auth/review/1?review=Anonymous%20review"
+
+Output:
+
+{"message":"User not logged in"}

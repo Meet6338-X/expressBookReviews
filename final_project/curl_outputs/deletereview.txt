@@ -1,0 +1,21 @@
+Question 10: cURL command and output showing the delete message after deleting a book review (logged-in user; session cookie saved at login with -c cookies.txt)
+
+1) Delete own review for the book with ISBN 1 (after adding it, as in Question 9)
+
+Command:
+
+curl -s -X DELETE http://localhost:5000/customer/auth/review/1 -b cookies.txt
+
+Output:
+
+{"message":"Review for ISBN 1 deleted."}
+
+2) Deleting a review without logging in (failure case)
+
+Command:
+
+curl -s -X DELETE http://localhost:5000/customer/auth/review/1
+
+Output:
+
+{"message":"User not logged in"}

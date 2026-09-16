@@ -1,0 +1,31 @@
+Question 8: cURL command and output showing the result of logging in as a registered user
+
+1) Login as a registered user with correct credentials (success case)
+
+Command:
+
+curl -s -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username":"john_doe","password":"secret123"}' -c cookies.txt
+
+Output:
+
+{"message":"Login successful!"}
+
+2) Login with wrong password (failed login case)
+
+Command:
+
+curl -s -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username":"john_doe","password":"wrongpass"}'
+
+Output:
+
+{"message":"Invalid Login. Check username and password"}
+
+3) Login without username or password (failure case)
+
+Command:
+
+curl -s -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username":"john_doe"}'
+
+Output:
+
+{"message":"Username or Password not provided Cannot Login"}

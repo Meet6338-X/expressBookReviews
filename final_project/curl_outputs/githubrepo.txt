@@ -1,0 +1,24 @@
+Question 1: cURL command and output showing the GitHub repository is forked from ibm-developer-skills-network/expressBookReviews
+
+Command:
+
+curl -s https://api.github.com/repos/Meet6338-X/expressBookReviews | jq '.parent.full_name'
+
+Output:
+
+"ibm-developer-skills-network/expressBookReviews"
+
+Additional verification (fork flag is true):
+
+Command:
+
+curl -s https://api.github.com/repos/Meet6338-X/expressBookReviews | jq '{fork: .fork, parent: .parent.full_name}'
+
+Output:
+
+{
+  "fork": true,
+  "parent": "ibm-developer-skills-network/expressBookReviews"
+}
+
+Repository URL: https://github.com/Meet6338-X/expressBookReviews
