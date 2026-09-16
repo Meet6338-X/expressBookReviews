@@ -8,7 +8,7 @@ curl -s -X POST http://localhost:5000/register -H "Content-Type: application/jso
 
 Output:
 
-{"message":"User successfully registred. Now you can login"}
+{"message":"User successfully registered. Now you can login"}
 
 2) Registering the same username again (already registered case)
 
@@ -18,7 +18,7 @@ curl -s -X POST http://localhost:5000/register -H "Content-Type: application/jso
 
 Output:
 
-{"message":"Username alredy registered"}
+{"message":"Username already registered"}
 
 3) Registering without username or password (failure case)
 
